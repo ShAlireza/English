@@ -10,7 +10,6 @@ LoginAPIView = ObtainAuthToken
 
 
 class SignUpAPIView(GenericAPIView):
-    permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
 
     def post(self, request):
@@ -21,3 +20,12 @@ class SignUpAPIView(GenericAPIView):
         return Response(
             data={'detail': 'Welcome!', 'full_name': user.get_full_name()},
             status=status.HTTP_200_OK)
+
+
+class LogoutAPIView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        request.user.auth_token.delete()
+
+        return Response(data={'data': 'Logged out successfully'})
